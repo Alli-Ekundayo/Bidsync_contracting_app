@@ -7,6 +7,10 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
+    // Allow this external host (used by Render preview or tunnels)
+    allowedHosts: [
+      'bidsync-contracting-app.onrender.com'
+    ],
   },
   plugins: [
     react(),
