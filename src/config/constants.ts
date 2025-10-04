@@ -4,14 +4,15 @@
 
 // Supabase Configuration (Public keys - safe to store in code)
 export const SUPABASE_CONFIG = {
-  url: "https://buzczrqgoobvokfbztgk.supabase.co",
-  publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1emN6cnFnb29idm9rZmJ6dGdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4MTE1OTIsImV4cCI6MjA2NDM4NzU5Mn0.663wiPn0lmelVLVbrPmjXH_8FsvbOvjkn8c8jg_4tI0"
+  url: "https://wpagznqpsehdilvouujv.supabase.co",
+  publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYWd6bnFwc2VoZGlsdm91dWp2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjQ5MjMzNCwiZXhwIjoyMDYyMDY4MzM0fQ.RjncFAnWFxaLr9vmmuG_E0biwu_Ap2utoTEXVlM0Dj4"
 };
 
 // Webhook URLs (Update these as needed)
 export const WEBHOOK_URLS = {
-  aiConsultant: "https://eim.app.n8n.cloud/webhook-test/ai-consultant",
-  createProposal: "https://eim.app.n8n.cloud/webhook-test/create-proposal"
+  // Prefer Vite env vars so deployments can override without touching source
+  aiConsultant: (import.meta.env.VITE_WEBHOOK_AI_CONSULTANT as string) || "https://n8n.srv940308.hstgr.cloud/webhook/ai-consultant",
+  createProposal: (import.meta.env.VITE_WEBHOOK_CREATE_PROPOSAL as string) || "https://n8n.srv940308.hstgr.cloud/webhook/create-proposal",
 };
 
 // API Endpoints

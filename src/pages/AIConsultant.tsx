@@ -59,10 +59,14 @@ const AIConsultant = () => {
 
       // Send message to webhook and wait for response
       const response = await sendToAIConsultantWebhook(inputMessage, user.id);
-      
+
+      const aiContent = typeof response === 'string' && response.trim().length > 0
+        ? response
+        : "I received your message and I'm processing it. How else can I help you?";
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: response.message || "I received your message and I'm processing it. How else can I help you?",
+        content: aiContent,
         sender: 'ai',
         timestamp: new Date()
       };
