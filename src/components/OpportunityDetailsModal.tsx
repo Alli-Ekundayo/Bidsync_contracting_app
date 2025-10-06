@@ -1,5 +1,6 @@
 
 import React from "react";
+import { safeParseJson } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,18 +30,7 @@ const OpportunityDetailsModal: React.FC<OpportunityDetailsModalProps> = ({
   const oppData = opportunity.opportunity_data || {};
   
   // Parse the opportunity data once
-  const getParsedData = () => {
-    if (typeof oppData === 'string') {
-      try {
-        return JSON.parse(oppData);
-      } catch (error) {
-        return oppData;
-      }
-    }
-    return oppData;
-  };
-  
-  const parsedData = getParsedData();
+  const parsedData = safeParseJson(oppData);
 
   const getOpportunityDescription = (oppData: any) => {
     return oppData.description || 

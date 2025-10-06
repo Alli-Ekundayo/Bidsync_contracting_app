@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { useDashboardData } from "@/hooks/useDashboardData";
+import { safeParseJson } from '@/lib/utils';
 
 const getStatusColor = (status: string) => {
   switch (status?.toLowerCase()) {
@@ -162,13 +163,7 @@ const Dashboard = () => {
                   dashboardData.recentOpportunities.map((opportunity, index) => {
                     // Parse the opportunity data if it's a JSON string
                     let parsedData = opportunity.opportunity_data;
-                    if (typeof opportunity.opportunity_data === 'string') {
-                      try {
-                        parsedData = JSON.parse(opportunity.opportunity_data);
-                      } catch (error) {
-                        parsedData = opportunity.opportunity_data;
-                      }
-                    }
+                    parsedData = safeParseJson(opportunity.opportunity_data);
                     
                     return (
                       <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">

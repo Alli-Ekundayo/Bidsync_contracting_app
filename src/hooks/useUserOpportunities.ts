@@ -3,15 +3,17 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+import { OpportunityData } from '@/types/opportunity';
+
 export interface UserOpportunity {
   id: string;
   user_id: string;
   opportunity_id: string;
-  opportunity_data: any;
+  opportunity_data: OpportunityData | string;
   ai_analysis: any;
-  relevance_score: number;
-  is_saved: boolean;
-  is_applied: boolean;
+  relevance_score?: number;
+  is_saved?: boolean;
+  is_applied?: boolean;
   source_platform: string;
   created_at: string;
 }

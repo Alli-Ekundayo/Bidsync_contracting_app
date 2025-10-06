@@ -5,7 +5,8 @@
 // Supabase Configuration (Public keys - safe to store in code)
 export const SUPABASE_CONFIG = {
   url: (import.meta.env.VITE_SUPABASE_URL as string) || "https://wpagznqpsehdilvouujv.supabase.co",
-  publishableKey: (import.meta.env.VITE_SUPABASE_KEY as string) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYWd6bnFwc2VoZGlsdm91dWp2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjQ5MjMzNCwiZXhwIjoyMDYyMDY4MzM0fQ.RjncFAnWFxaLr9vmmuG_E0biwu_Ap2utoTEXVlM0Dj4"
+  publishableKey: (import.meta.env.VITE_SUPABASE_KEY as string) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndwYWd6bnFwc2VoZGlsdm91dWp2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjQ5MjMzNCwiZXhwIjoyMDYyMDY4MzM0fQ.RjncFAnWFxaLr9vmmuG_E0biwu_Ap2utoTEXVlM0Dj4",
+  serviceRoleKey: import.meta.env.VITE_SUPABASE_SERVICE_KEY as string
 };
 
 // Webhook URLs (Update these as needed)

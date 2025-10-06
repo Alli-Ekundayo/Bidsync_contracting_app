@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { sendToCreateProposalWebhook } from "@/utils/webhooks";
 import ProposalDetailsModal from "@/components/ProposalDetailsModal";
 import { useOpportunityProposalCorrelation } from "@/hooks/useOpportunityProposalCorrelation";
+import { safeParseJson } from '@/lib/utils';
 
 const Proposals = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -186,31 +187,24 @@ const Proposals = () => {
                         <CardTitle className="text-lg">
                           {(() => {
                             // First try to get title from proposal content
-                            if (proposal.content) {
-                              try {
-                                const parsed = JSON.parse(proposal.content);
-                                const proposalData = parsed.proposal || parsed;
-                                if (proposalData.opportunity_title) {
-                                  return proposalData.opportunity_title;
-                                }
-                              } catch (error) {
-                                // If JSON parsing fails, just use the proposal title
-                                return proposal.title;
+                              if (proposal.content) {
+                                  try {
+                                    const parsed = safeParseJson(proposal.content);
+                                    const proposalData = parsed?.proposal || parsed;
+                                    if (proposalData?.opportunity_title) {
+                                      return proposalData.opportunity_title;
+                                    }
+                                  } catch (e) {
+                                    // If JSON parsing fails, just use the proposal title
+                                    return proposal.title;
+                                  }
                               }
-                            }
                             
                             // Fallback to linked opportunity title
-                            if (linkedOpportunity) {
-                              if (typeof linkedOpportunity.opportunity_data === 'string') {
-                                try {
-                                  return JSON.parse(linkedOpportunity.opportunity_data).title || proposal.title;
-                                } catch {
-                                  return proposal.title;
-                                }
-                              } else {
-                                return linkedOpportunity.opportunity_data?.title || proposal.title;
+                              if (linkedOpportunity) {
+                                const lo = safeParseJson(linkedOpportunity.opportunity_data);
+                                return lo?.title || proposal.title;
                               }
-                            }
                             
                             return proposal.title;
                           })()}

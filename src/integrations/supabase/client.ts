@@ -6,10 +6,26 @@ import { SUPABASE_CONFIG } from '@/config/constants';
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_CONFIG.url, SUPABASE_CONFIG.publishableKey, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
+// Regular client for authenticated users
+export const supabase = createClient<Database>(
+  SUPABASE_CONFIG.url, 
+  SUPABASE_CONFIG.publishableKey,
+  {
+    auth: {
+      storage: localStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+    }
   }
-});
+);
+
+// Service role client for admin operations
+export const supabaseAdmin = createClient<Database>(
+  SUPABASE_CONFIG.url,
+  SUPABASE_CONFIG.serviceRoleKey || SUPABASE_CONFIG.publishableKey,
+  {
+    auth: {
+      persistSession: false,
+    }
+  }
+);

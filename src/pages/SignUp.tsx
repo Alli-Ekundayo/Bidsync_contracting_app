@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, Lock, Mail, User, Building } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, supabaseAdmin } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const SignUp = () => {
@@ -57,11 +57,11 @@ const SignUp = () => {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/onboarding`,
           data: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
             company_name: formData.company,
+            first_name: formData.firstName,
+            last_name: formData.lastName
           }
         }
       });
@@ -76,13 +76,67 @@ const SignUp = () => {
       }
 
       if (data.user) {
+          // Insert the user record using the admin client
+          const { error: insertError } = await supabaseAdmin
+            .from('users')
+            .upsert([
+              {
+                id: data.user.id,
+                email: formData.email,
+                company_name: formData.company,
+                onboarding_completed: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+              }
+            ], { 
+              onConflict: 'id',
+              ignoreDuplicates: true 
+            });
+
+          if (insertError) {
+            console.error('Error creating user record:', insertError);
+            await supabase.auth.signOut();
+            toast({
+              title: "Account Setup Error",
+              description: "Failed to create user profile. Please try again.",
+              variant: "destructive",
+            });
+            return;
+          }
+          
+          // Verify the user record exists
+          const { data: users } = await supabase
+            .from('users')
+            .select('id, onboarding_completed')
+            .eq('id', data.user.id)
+            .limit(1);
+            
+          if (!users || users.length === 0) {
+            console.error('User record not found after insert');
+            await supabase.auth.signOut();
+            toast({
+              title: "Account Setup Error",
+              description: "Failed to verify user profile. Please try again.",
+              variant: "destructive",
+            });
+            return;
+          }
+
+          toast({
+            title: "Account Created!",
+            description: "Welcome to BidSync! Let's set up your profile.",
+          });
+
+          // Redirect to onboarding page after successful signup
+          navigate("/onboarding");
+
         toast({
           title: "Account Created!",
-          description: "Please check your email to verify your account, then you can sign in.",
+          description: "Welcome to BidSync! Let's set up your profile.",
         });
 
-        // Redirect to sign in page after successful signup
-        navigate("/signin");
+        // Redirect to onboarding page after successful signup
+        navigate("/onboarding");
       }
     } catch (error) {
       console.error("Sign up error:", error);
