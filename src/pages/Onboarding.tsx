@@ -24,6 +24,9 @@ const Onboarding = () => {
     samRegistered: false
   });
 
+  const [newNaics, setNewNaics] = useState("");
+  const [newCertification, setNewCertification] = useState("");
+
   const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({
       ...prev,
@@ -99,11 +102,37 @@ const Onboarding = () => {
     handleInputChange("naicsCodes", newCodes);
   };
 
+  const addNaicsCode = () => {
+    const code = newNaics.trim();
+    if (!code) return;
+    if (!formData.naicsCodes.includes(code)) {
+      handleInputChange('naicsCodes', [...formData.naicsCodes, code]);
+    }
+    setNewNaics('');
+  };
+
+  const removeNaicsCode = (code: string) => {
+    handleInputChange('naicsCodes', formData.naicsCodes.filter(c => c !== code));
+  };
+
   const handleCertificationChange = (cert: string) => {
     const newCerts = formData.certifications.includes(cert)
       ? formData.certifications.filter(c => c !== cert)
       : [...formData.certifications, cert];
     handleInputChange("certifications", newCerts);
+  };
+
+  const addCertification = () => {
+    const cert = newCertification.trim();
+    if (!cert) return;
+    if (!formData.certifications.includes(cert)) {
+      handleInputChange('certifications', [...formData.certifications, cert]);
+    }
+    setNewCertification('');
+  };
+
+  const removeCertification = (cert: string) => {
+    handleInputChange('certifications', formData.certifications.filter(c => c !== cert));
   };
 
   const commonNAICS = [
@@ -176,6 +205,25 @@ const Onboarding = () => {
                   </div>
                 ))}
               </div>
+              <div className="mt-4">
+                <Label>Add a custom NAICS code</Label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    placeholder="e.g. 541611"
+                    value={newNaics}
+                    onChange={(e) => setNewNaics(e.target.value)}
+                  />
+                  <Button onClick={addNaicsCode} className="whitespace-nowrap">Add</Button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {formData.naicsCodes.map(code => (
+                    <span key={code} className="px-2 py-1 bg-gray-100 rounded-full text-sm flex items-center gap-2">
+                      <strong>{code}</strong>
+                      <button onClick={() => removeNaicsCode(code)} className="text-xs text-red-600">x</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -203,6 +251,25 @@ const Onboarding = () => {
                     </label>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4">
+                <Label>Add a custom certification</Label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    placeholder="e.g. Minority-Owned"
+                    value={newCertification}
+                    onChange={(e) => setNewCertification(e.target.value)}
+                  />
+                  <Button onClick={addCertification} className="whitespace-nowrap">Add</Button>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {formData.certifications.map(cert => (
+                    <span key={cert} className="px-2 py-1 bg-gray-100 rounded-full text-sm flex items-center gap-2">
+                      <span>{cert}</span>
+                      <button onClick={() => removeCertification(cert)} className="text-xs text-red-600">x</button>
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
