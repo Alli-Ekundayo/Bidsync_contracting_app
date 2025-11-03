@@ -7,9 +7,21 @@ export default defineConfig({
   server: {
     host: "::",
     port: 8080,
-    // Allow this external host (used by Render preview or tunnels)
+    // Allow these external hosts
     allowedHosts: [
-      'bidsync.onrender.com'
+      'bidsync.onrender.com',
+      'www.bidoogle.com',
+      'bidoogle.com'
+    ],
+  },
+  preview: {
+    host: "::",
+    port: 3000,
+    // Allow these external hosts in preview mode
+    allowedHosts: [
+      'bidsync.onrender.com',
+      'www.bidoogle.com',
+      'bidoogle.com'
     ],
   },
   plugins: [
